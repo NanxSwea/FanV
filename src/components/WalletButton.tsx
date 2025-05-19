@@ -24,11 +24,9 @@ const WalletButton: React.FC = () => {
       ) : (
         <div className="flex items-center bg-gray-800 rounded-lg px-4 py-2 border border-indigo-500/30">
           <Wallet className="h-5 w-5 mr-2 text-indigo-400" />
-          <span className="text-sm font-mono">{shortenAddress(address)}</span>
+          <span className="text-sm font-mono text-white">{shortenAddress(address)}</span>
         </div>
       )}
     </div>
   );
-};
-
-export default WalletButton;
+}
