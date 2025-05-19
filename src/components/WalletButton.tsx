@@ -22,13 +22,13 @@ const WalletButton: React.FC = () => {
           {connecting ? 'Connecting...' : 'Connect Wallet'}
         </button>
       ) : (
-        <div className="flex items-center bg-gray-800 rounded-lg px-4 py-2 border border-indigo-500/30">
+        <div className="flex items-center bg-gray-800/80 backdrop-blur-sm rounded-lg px-4 py-2 border border-indigo-500/30">
           <Wallet className="h-5 w-5 mr-2 text-indigo-400" />
           <span className="text-sm font-mono text-white">{shortenAddress(address)}</span>
         </div>
       )}
     </div>
   );
-}
+};
 
-export default WalletButton
+export default WalletButton;

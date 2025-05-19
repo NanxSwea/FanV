@@ -1,43 +1,61 @@
-// Check if any Sui wallet is installed (not just Slush wallet)
+// Check if any Sui wallet is installed
 export const checkForSlushWallet = async (): Promise<boolean> => {
-  return !!window.suiWallet || !!window.sui;
+  // Wait for wallet to be injected
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return !!(window.suiWallet || window.sui);
 };
 
 // Connect to wallet and get address
 export const connectWallet = async (): Promise<string> => {
-  // Check for any Sui wallet
-  const wallet = window.suiWallet || window.sui;
-  
-  if (!wallet) {
-    throw new Error('No Sui wallet found');
-  }
-
   try {
-    // First try to connect
-    const { accounts } = await wallet.connect();
+    // Wait for wallet to be fully injected
+    await new Promise(resolve => setTimeout(resolve, 100));
     
-    if (accounts && accounts.length > 0) {
-      return accounts[0];
+    // Try both wallet providers
+    const wallet = window.suiWallet || window.sui;
+    
+    if (!wallet) {
+      throw new Error('No Sui wallet found. Please install a Sui wallet extension.');
     }
 
-    // Fallback to manual permission flow if connect doesn't work
+    // Check if already connected
+    try {
+      const accounts = await wallet.getAccounts();
+      if (accounts && accounts.length > 0) {
+        return accounts[0];
+      }
+    } catch (e) {
+      // Ignore errors and try connecting
+    }
+
+    // Try connecting
+    try {
+      const { accounts } = await wallet.connect();
+      if (accounts && accounts.length > 0) {
+        return accounts[0];
+      }
+    } catch (e) {
+      console.error('Connect failed, trying permissions flow:', e);
+    }
+
+    // Try permissions flow as fallback
     const hasPermissions = await wallet.hasPermissions();
     if (!hasPermissions) {
       const granted = await wallet.requestPermissions();
       if (!granted) {
-        throw new Error('User denied wallet connection');
+        throw new Error('Wallet connection was denied');
       }
     }
 
     const walletAccounts = await wallet.getAccounts();
-    if (walletAccounts.length === 0) {
+    if (!walletAccounts || walletAccounts.length === 0) {
       throw new Error('No accounts found in wallet');
     }
 
     return walletAccounts[0];
-  } catch (error) {
-    console.error('Error connecting to wallet:', error);
-    throw error;
+  } catch (error: any) {
+    console.error('Wallet connection error:', error);
+    throw new Error(error.message || 'Failed to connect wallet');
   }
 };
 

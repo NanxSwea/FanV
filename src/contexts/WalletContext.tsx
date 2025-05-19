@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { SuiClient } from '@mysten/sui.js/client';
 import { getFullnodeUrl } from '@mysten/sui.js/client';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { checkForSlushWallet, connectWallet } from '../utils/slushWallet';
 
 type WalletContextType = {
@@ -35,7 +34,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [suiClient, setSuiClient] = useState<SuiClient | null>(null);
 
   useEffect(() => {
-    // Initialize Sui client for devnet
+    // Initialize Sui client
     const client = new SuiClient({ url: getFullnodeUrl('devnet') });
     setSuiClient(client);
 
@@ -55,7 +54,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       }
     };
 
-    checkWalletConnection();
+    // Add a small delay to ensure wallet is injected
+    setTimeout(checkWalletConnection, 500);
   }, []);
 
   const connectWalletAction = async () => {
@@ -64,7 +64,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       const hasWallet = await checkForSlushWallet();
       
       if (!hasWallet) {
-        alert('Please install Slush Sui Wallet to continue.');
+        alert('Please install a Sui wallet extension to continue.');
         return;
       }
       
@@ -73,9 +73,9 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         setAddress(walletAddress);
         setConnected(true);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error connecting wallet:', error);
-      alert('Failed to connect wallet. Please try again.');
+      alert(error.message || 'Failed to connect wallet. Please try again.');
     } finally {
       setConnecting(false);
     }
@@ -88,11 +88,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
 
     try {
-      // In a real implementation, this would create a transaction to mint an NFT on Sui
-      // Here we're just simulating it with a timeout
+      // Simulate NFT minting
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Mocked NFT object ID - in a real app, this would be the actual object ID from the blockchain
       const mockObjectId = `0x${Math.floor(Math.random() * 10000000000000000).toString(16)}`;
       return mockObjectId;
     } catch (error) {
@@ -107,8 +104,6 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
 
     try {
-      // In a real implementation, this would query the blockchain for NFTs owned by the address
-      // For now, we'll return mock data
       return [
         {
           id: `0x${Math.floor(Math.random() * 10000000000000000).toString(16)}`,
