@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-gray-100 font-sans;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl font-bold mb-6;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl font-bold mb-4;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl font-bold mb-3;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 focus:ring-indigo-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:from-purple-600 hover:to-pink-700 focus:ring-pink-500;
+  }
+
+  .card {
+    @apply bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-xl border border-gray-700/50 overflow-hidden transition-all duration-300;
+  }
+
+  .card-interactive {
+    @apply card hover:shadow-2xl hover:border-indigo-400/50 hover:-translate-y-1;
+  }
+
+  .nft-card {
+    @apply card-interactive p-4 flex flex-col;
+  }
+
+  .fandom-card {
+    @apply card-interactive relative overflow-hidden h-80;
+  }
+  
+  .input {
+    @apply bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-2 w-full text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent;
+  }
+
+  .quiz-option {
+    @apply bg-gray-800/80 border border-gray-700 rounded-lg p-4 mb-3 cursor-pointer transition-all hover:bg-indigo-600/20 hover:border-indigo-400;
+  }
+
+  .quiz-option.selected {
+    @apply bg-indigo-600/40 border-indigo-400;
+  }
+}
+
+.wallet-animation {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(99, 102, 241, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+.minting-animation {
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500;
+}
