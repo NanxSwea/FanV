@@ -30,3 +30,5 @@ const WalletButton: React.FC = () => {
     </div>
   );
 }
+
+export default WalletButton
